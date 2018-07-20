@@ -9,6 +9,7 @@
 #ifndef PARTICLE_FILTER_H_
 #define PARTICLE_FILTER_H_
 
+#include <random>
 #include "helper_functions.h"
 
 struct Particle {
@@ -21,6 +22,17 @@ struct Particle {
 	std::vector<int> associations;
 	std::vector<double> sense_x;
 	std::vector<double> sense_y;
+	
+	void norm() {
+	    if ((theta < -M_PI) || (theta > M_PI))
+	    {
+		double a = theta + M_PI;
+		int b = floor(a / (2*M_PI));
+		double c = a - b*2*M_PI - M_PI;
+		theta = c;
+	    }
+	    return;
+	}
 };
 
 
@@ -37,6 +49,8 @@ class ParticleFilter {
 	
 	// Vector of weights of all particles
 	std::vector<double> weights;
+	
+	std::default_random_engine _gen;
 	
 public:
 	
